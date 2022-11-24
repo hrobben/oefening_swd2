@@ -39,9 +39,10 @@ try {
     echo $v;
     if ($k=='id') {
       $id = strip_tags($v);
+      $l= 'delete.php?id='.$id;
     }
     if ($k=='country') {
-      echo '<td><a href=\'delete.php?id=\'' .$id.'>X</a></td>';
+      echo "<td><a href='$l'>X</a></td>";
     }
   }
 } catch(PDOException $e) {
