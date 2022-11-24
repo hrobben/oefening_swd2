@@ -1,6 +1,7 @@
 <?php
 echo "<h1>testen</h1>";
-echo "<a href='./new.php'>Nieuw</a>";
+
+echo "<a href='new.php'>Nieuw</a>";
 echo "<table style='border: solid 1px black;'>";
 $id = 'nr';
 $adress= 'adress';
@@ -22,13 +23,18 @@ class TableRows extends RecursiveIteratorIterator {
   }
 
   function endChildren() {
-    echo "<td>wijzig</td></tr>" . "\n";
+    echo "</tr>" . "\n";
   }
 }
 
-require_once 'openDB.php';
+$servername = "localhost";
+$username = "henry";
+$password = "password";
+$dbname = "oefening";
 
 try {
+  $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   $stmt = $conn->prepare("SELECT * FROM myTable");
   $stmt->execute();
 
@@ -43,5 +49,5 @@ try {
 $conn = null;
 echo "</table>";
 
-echo "<a href='./new.php'>Nieuw</a>";
+echo "<a href='new.php'>Nieuw</a>";
 ?>
