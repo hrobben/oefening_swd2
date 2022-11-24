@@ -3,11 +3,11 @@ echo "<h1>testen</h1>";
 
 echo "<a href='new.php'>Nieuw</a>";
 echo "<table style='border: solid 1px black;'>";
-$id = 'nr';
+$id = 'id';
 $adress= 'adress';
 $email = 'email';
 $phone = 'phone';
-echo '<tr><th>'.$id.'</th><th>'.$adress.'</th><th>'.$email.'</th><th>'.$phone.'</th></tr>';
+echo '<tr><th>'.$id.'</th><th>'.$adress.'</th><th>'.$email.'</th><th>'.$phone.'</th><th>name</th><td>postalZip</td><td>region</td><td>country</td></tr>';
 
 class TableRows extends RecursiveIteratorIterator {
   function __construct($it) {
