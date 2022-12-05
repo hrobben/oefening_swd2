@@ -62,9 +62,24 @@ if ($_POST) {
     try {
         $id = $_POST['id'];
         $name = $_POST['name'];
+        $address = $_POST['address'];
+        $email = $_POST['email'];
+        $phone = $_POST['phone'];
+        $postalZip = $_POST['postalZip'];
+        $region = $_POST['region'];
+        $country = $_POST['country'];
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $sql = "UPDATE myTable SET name='$name' WHERE id=$id";
+        $sql = "UPDATE myTable 
+                    SET 
+                        name='$name', 
+                        address='$address',
+                        country='$county',
+                        phone='$phone',
+                        region='$region',
+                        postalZip='$postalZip',
+                        email='$email'
+                WHERE id=$id";
 
         // Prepare statement
         $stmt = $conn->prepare($sql);
