@@ -12,13 +12,23 @@ if ($_GET['id']) {
     try {
         // set the PDO error mode to exception
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $stmt = $conn->prepare("SELECT * FROM myTable WHERE id=$id");
+        $stmt = $conn->prepare("SELECT * FROM $tbl WHERE id=$id");
         $stmt->execute();
 
         // set the resulting array to associative
         $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
 
         foreach ($stmt->fetchAll() as $k => $v) {
+/*  $v is een array met
+    [id] => 1
+    [address] => Ap #439-6154 Ultricies Rd.
+    [email] => at.fringilla@yahoo.net
+    [phone] => 1-952-688-8757
+    [name] => Timothy Clayton
+    [postalZip] => 27568
+    [region] => North Kalimantan
+    [country] => Brazil
+*/
             $email = $v['email'];
             $name = $v['name'];
             $postalZip = $v['postalZip'];
@@ -74,7 +84,7 @@ if ($_POST) {
                     SET 
                         name='$name', 
                         address='$address',
-                        country='$county',
+                        country='$country',
                         phone='$phone',
                         region='$region',
                         postalZip='$postalZip',

@@ -13,7 +13,7 @@ if ($_POST) {
     $country = $_POST['country'];
     try {
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = "INSERT INTO myTable (name, address, email, phone, postalZip, region, country)
+        $sql = "INSERT INTO $tbl (name, address, email, phone, postalZip, region, country)
                 VALUES ('$name', '$address', '$email', '$phone', '$postalZip', '$region', '$country')";
         // use exec() because no results are returned
         $conn->exec($sql);

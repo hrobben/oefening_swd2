@@ -1,56 +1,45 @@
 <?php
-echo "<h1>testen</h1>";
+include_once('openDB.php');
 
-echo "<a href='new.php'>Nieuw</a>";
 echo "<table style='border: solid 1px black;'>";
-$id = 'id';
-$adress= 'adress';
-$email = 'email';
-$phone = 'phone';
-echo '<tr><th>'.$id.'</th><th>'.$adress.'</th><th>'.$email.'</th><th>'.$phone.'</th><th>name</th><th>postalZip</th><th>region</th><th>country</th><th>Action</th></tr>';
-
-class TableRows extends RecursiveIteratorIterator {
-  function __construct($it) {
-    parent::__construct($it, self::LEAVES_ONLY);
-  }
-
-  function current() {
-    return "<td style='width:150px;border:1px solid black;'>" . parent::current(). "</td>";
-  }
-
-  function beginChildren() {
-    echo "<tr>";
-  }
-
-  function endChildren() {
-    echo "</tr>" . "\n";
-  }
-}
-
-include_once ('openDB.php');
+//echo "<tr><th>Id</th><th>Email</th><th>Name</th><th>Bedrag</th></tr>";
 
 try {
-  $stmt = $conn->prepare("SELECT * FROM myTable");
-  $stmt->execute();
+    $q = $conn->prepare("DESCRIBE $tbl");
+    $q->execute();
+    $table_fields = $q->fetchAll(PDO::FETCH_COLUMN);
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+}
 
-  // set the resulting array to associative
-  $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-  foreach(new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k=>$v) {
-    echo $v;
-    if ($k=='id') {
-      $id = strip_tags($v);
-      $l= 'delete.php?id='.$id;
-      $e= 'edit.php?id='.$id;
+echo '<tr>';
+foreach ($table_fields as $row) {
+    echo '<th>' . $row . '</th>';
+    $laatste_kolom = $row;
+}
+echo '<th>action</th></tr>';
+
+
+try {
+    $stmt = $conn->prepare("SELECT * FROM $tbl");
+    $stmt->execute();
+
+    // set the resulting array to associative
+    $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    foreach (new TableRows(new RecursiveArrayIterator($stmt->fetchAll())) as $k => $v) {
+        echo $v;
+        if ($k == 'id') {
+            $id = strip_tags($v);
+            $l = 'delete.php?id=' . $id;
+            $e = 'edit.php?id=' . $id;
+        }
+        if ($k == $laatste_kolom) {
+            echo "<td><a href='$l'>X</a> <a href='$e'>E</a></td>";
+        }
     }
-    if ($k=='country') {
-      echo "<td><a href='$l'>X</a> <a href='$e'>E</a></td>";
-    }
-  }
-} catch(PDOException $e) {
-  echo "Error: " . $e->getMessage();
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
 }
 $conn = null;
 echo "</table>";
-
-echo "<a href='new.php'>Nieuw</a>";
 ?>
