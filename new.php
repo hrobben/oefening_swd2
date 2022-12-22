@@ -4,6 +4,7 @@ echo '<h1>Nieuwe regel toevoegen</h1>';
 if ($_POST) {
     include_once('openDB.php');
     echo "<h2>regel toevoegen.</h2>";
+
     $name = $_POST['name'];
     $address = $_POST['address'];
     $email = $_POST['email'];
@@ -11,6 +12,7 @@ if ($_POST) {
     $postalZip = $_POST['postalZip'];
     $region = $_POST['region'];
     $country = $_POST['country'];
+
     try {
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $sql = "INSERT INTO $tbl (name, address, email, phone, postalZip, region, country)

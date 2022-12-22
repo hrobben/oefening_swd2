@@ -4,7 +4,7 @@ $servername = "localhost";
 $username = "henry";
 $password = "password";
 $dbname = "oefening";
-$tbl = 'debiteur';
+$tbl = 'myTable';
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
@@ -13,6 +13,14 @@ try {
     //echo "Connected successfully";
 } catch (PDOException $e){
     echo "Connection failed: " . $e->getMessage();
+}
+
+try {
+    $q = $conn->prepare("DESCRIBE $tbl");
+    $q->execute();
+    $table_fields = $q->fetchAll(PDO::FETCH_COLUMN);
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
 }
 
 class TableRows extends RecursiveIteratorIterator

@@ -1,16 +1,12 @@
 <?php
 include_once('openDB.php');
 
+echo '<div>
+    <a href="new.php">Nieuw</a>
+</div>';
+
 echo "<table style='border: solid 1px black;'>";
 //echo "<tr><th>Id</th><th>Email</th><th>Name</th><th>Bedrag</th></tr>";
-
-try {
-    $q = $conn->prepare("DESCRIBE $tbl");
-    $q->execute();
-    $table_fields = $q->fetchAll(PDO::FETCH_COLUMN);
-} catch (PDOException $e) {
-    echo "Error: " . $e->getMessage();
-}
 
 echo '<tr>';
 foreach ($table_fields as $row) {
