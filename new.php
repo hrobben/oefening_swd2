@@ -1,22 +1,32 @@
 <?php
 echo '<h1>Nieuwe regel toevoegen</h1>';
 
+include_once('openDB.php');
+
 if ($_POST) {
-    include_once('openDB.php');
     echo "<h2>regel toevoegen.</h2>";
 
-    $name = $_POST['name'];
-    $address = $_POST['address'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $postalZip = $_POST['postalZip'];
-    $region = $_POST['region'];
-    $country = $_POST['country'];
+    foreach ($table_fields as $row) {
+        $$row = $_POST[$row];
+    }
 
     try {
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = "INSERT INTO $tbl (name, address, email, phone, postalZip, region, country)
-                VALUES ('$name', '$address', '$email', '$phone', '$postalZip', '$region', '$country')";
+        $sql = "INSERT INTO $tbl (";
+        foreach ($table_fields as $row) {
+            if ($row <> 'id') {
+                $sql .= $row . ',';
+            }
+        }
+        $sql = substr_replace($sql, "", -1);  // laatste komma weg.
+        $sql .= ") VALUES (";
+        foreach ($table_fields as $row) {
+            if ($row <> 'id') {
+                $sql .= "'" . $$row . "',";
+            }
+        }
+        $sql = substr_replace($sql, "", -1);  // laatste komma weg.
+        $sql .= ")";
         // use exec() because no results are returned
         $conn->exec($sql);
         echo "New record created successfully";
@@ -29,23 +39,14 @@ if ($_POST) {
 
 // formulier aanmaken
 echo "
- <form action=\"new.php\" method='post'>
-  <label for=\"fname\">name:</label><br>
-  <input type=\"text\" id=\"name\" name=\"name\"><br>
-  <label for=\"address\">address:</label><br>
-  <input type=\"text\" id=\"address\" name=\"address\"><br>
-  <label for=\"email\">email:</label><br>
-  <input type=\"text\" id=\"email\" name=\"email\"><br>
-  <label for=\"phone\">phone:</label><br>
-  <input type=\"text\" id=\"phone\" name=\"phone\"><br>
-  <label for=\"postalZip\">postalZip:</label><br>
-  <input type=\"text\" id=\"postalZip\" name=\"postalZip\"><br>
-  <label for=\"region\">region:</label><br>
-  <input type=\"text\" id=\"region\" name=\"region\"><br>
-  <label for=\"country\">country:</label><br>
-  <input type=\"text\" id=\"country\" name=\"country\"><br><br>
-  <input type=\"submit\" value=\"Wegschrijven\">
-</form> 
-
-<a href='index.php'>Terug naar index</a>
-";
+ <form action=\"new.php\" method='post'>";
+foreach ($table_fields as $row) {
+    if ($row <> 'id') {
+        echo "<label for=\"$row\">$row:</label><br>
+            <input type=\"text\" id=\"$row\" name=\"$row\"><br><br>";
+    }
+}
+echo "<input type=\"submit\" value=\"Wegschrijven\"> 
+        </form> 
+        <a href='index.php'>Terug naar index</a>
+        ";
