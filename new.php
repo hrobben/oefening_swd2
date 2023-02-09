@@ -7,7 +7,7 @@ if ($_POST) {
     echo "<h2>regel toevoegen.</h2>";
 
     foreach ($table_fields as $row) {
-        $$row = $_POST[$row];
+        $$row = $_POST[$row];   // $email = $_POST[$row];
     }
 
     try {

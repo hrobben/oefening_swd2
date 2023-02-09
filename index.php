@@ -1,11 +1,16 @@
 <?php
 include_once('openDB.php');
 
+echo 'tabel naam is '.$tbl;
+/*echo '<pre>';
+print_r($table_fields);
+echo '</pre>';*/
+
 echo '<div>
     <a href="new.php">Nieuw</a>
-</div>';
+</div><br>';
 
-echo "<table style='border: solid 1px black;'>";
+echo "<table style='border: solid 2px red;'>";
 //echo "<tr><th>Id</th><th>Email</th><th>Name</th><th>Bedrag</th></tr>";
 
 echo '<tr>';
