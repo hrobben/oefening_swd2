@@ -10,7 +10,7 @@ echo '<div>
     <a href="new.php">Nieuw</a>
 </div><br>';
 
-echo "<table style='border: solid 2px red;'>";
+echo "<table style='border: solid 2px blueviolet;'>";
 //echo "<tr><th>Id</th><th>Email</th><th>Name</th><th>Bedrag</th></tr>";
 
 echo '<tr>';
