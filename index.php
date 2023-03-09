@@ -18,7 +18,7 @@ foreach ($table_fields as $row) {
     echo '<th>' . $row . '</th>';
     $laatste_kolom = $row;
 }
-echo '<th>action</th></tr>';
+echo '<th>Image</th></th><th>action</th></tr>';
 
 
 try {
@@ -34,9 +34,9 @@ try {
             $l = 'delete.php?id=' . $id;
             $e = 'edit.php?id=' . $id;
         }
-/*        if ($k == 'image') {
-            echo ' <img src="./uploads/'.$v.'" alt="Girl in a jacket" height="100"> ';
-        }*/
+        if ($k == 'image') {
+            echo '<td><img src="./uploads/'.strip_tags($v).'" alt="Girl in a jacket" height="100"></td>';
+        }
         if ($k == $laatste_kolom) {
             echo "<td><a href='$l'>X</a> <a href='$e'>E</a></td>";
         }
