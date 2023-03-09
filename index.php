@@ -34,6 +34,9 @@ try {
             $l = 'delete.php?id=' . $id;
             $e = 'edit.php?id=' . $id;
         }
+/*        if ($k == 'image') {
+            echo ' <img src="./uploads/'.$v.'" alt="Girl in a jacket" height="100"> ';
+        }*/
         if ($k == $laatste_kolom) {
             echo "<td><a href='$l'>X</a> <a href='$e'>E</a></td>";
         }
