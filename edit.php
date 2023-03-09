@@ -27,7 +27,7 @@ if ($_GET['id']) {
             }
             // form
             echo "
-                    <form action=\"edit.php\" method='post'>
+                    <form action=\"edit.php\" method='post' enctype='multipart/form-data'>
                     <input type='hidden' name='id' value=$id>
                  ";
             foreach ($table_fields as $row) {
@@ -35,8 +35,8 @@ if ($_GET['id']) {
                     if ($row == 'image') {
                         echo '
                           Select image to upload:
-                              <input type="file" name="fileToUpload" id="fileToUpload">
-                        ';
+                              <input type="file" id="image" name="image" value="
+                        '.$$row.'"';
                     } else {
                         echo "<label for=\"$row\">$row:</label><br>
                           <input type=\"text\" id=\"$row\" name=\"$row\" value='" . $$row . "'><br>";
@@ -59,52 +59,15 @@ if ($_GET['id']) {
 }
 
 $image = null;
-if ($_POST) {
-    try {
-        foreach ($table_fields as $row) {
-            $$row = $_POST[$row];
-
-            if ($row == 'image') {  // fileToUpload
-                $image = $_POST['fileToUpload'];
-            }
-        }
-
-        $sql = "UPDATE $tbl SET ";
-        foreach ($table_fields as $row) {
-            if ($row <> 'id') {
-                $sql .= "$row = '" . $$row . "',";
-            }
-        }
-        $sql = substr_replace($sql, "", -1);  // laatste komma weg.
-        $sql .= "WHERE id = $id";
-
-        // Prepare statement
-        $stmt = $conn->prepare($sql);
-
-        // execute the query
-        $stmt->execute();
-
-        // echo a message to say the UPDATE succeeded
-        echo $stmt->rowCount() . " records UPDATED successfully";
-
-    } catch (PDOException $e) {
-        echo $sql . " < br>" . $e->getMessage();
-    }
-
-    $conn = null;
-
-
-}
-
-if ($image) {
+if ($_FILES) {
     $target_dir = "uploads/";
-    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+    $target_file = $target_dir . basename($_FILES["image"]["name"]);
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
     // Check if image file is a actual image or fake image
-    if (isset($_POST["fileToUpload"])) {
-        $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+    if (isset($_POST["submit"])) {
+        $check = getimagesize($_FILES["image"]["tmp_name"]);
         if ($check !== false) {
             echo "File is an image - " . $check["mime"] . ".";
             $uploadOk = 1;
@@ -115,14 +78,13 @@ if ($image) {
     }
 
     // Check if file already exists
-    print_r($_FILES);
     if (file_exists($target_file)) {
-        echo "Sorry, file already exists.";
+        echo "Sorry, file already exists. $target_file<br>";
         $uploadOk = 0;
     }
 
     // Check file size
-    if ($_FILES["fileToUpload"]["size"] > 500000) {
+    if ($_FILES["image"]["size"] > 500000) {
         echo "Sorry, your file is too large.";
         $uploadOk = 0;
     }
@@ -139,7 +101,7 @@ if ($image) {
         echo "Sorry, your file was not uploaded.";
         // if everything is ok, try to upload file
     } else {
-        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+        if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
             echo "The file " . htmlspecialchars(basename($_FILES["fileToUpload"]["name"])) . " has been uploaded.";
         } else {
             echo "Sorry, there was an error uploading your file.";
@@ -147,3 +109,43 @@ if ($image) {
     }
 }
 
+if ($_POST) {
+    try {
+        foreach ($table_fields as $row) {
+            $$row = $_POST[$row];
+
+            if ($row == 'image') {  // fileToUpload
+                $$row = $_FILES["image"]["name"];
+            }
+        }
+
+        $sql = "UPDATE $tbl SET ";
+        foreach ($table_fields as $row) {
+            if ($row <> 'id') {
+                $sql .= "$row = '" . $$row . "',";
+            }
+        }
+        $sql = substr_replace($sql, "", -1);  // laatste komma weg.
+        $sql .= " WHERE id = $id";
+echo $sql;
+        // Prepare statement
+        $stmt = $conn->prepare($sql);
+
+        // execute the query
+        $stmt->execute();
+
+        // echo a message to say the UPDATE succeeded
+        echo $stmt->rowCount() . " records UPDATED successfully";
+
+    } catch (PDOException $e) {
+        echo $sql . " < br>" . $e->getMessage();
+    }
+
+    $conn = null;
+
+}
+
+echo '</h1> '.$image;
+
+
+echo '</H1>';
